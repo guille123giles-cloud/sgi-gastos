@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function Home() {
+  const router = useRouter();
+
   // Estado base del formulario
   const [formData, setFormData] = useState({
     fecha: new Date().toISOString().split("T")[0],
@@ -131,27 +134,58 @@ export default function Home() {
     }
   };
 
+  // Función para cerrar sesión
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
   const finalSummary = getFinalValues();
 
-  // CLASES BASE DE INPUTS (Tema Excel Light)
+  // CLASES BASE DE INPUTS
   const inputBaseClass = "w-full p-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-all text-sm";
   const inputSubClass = "w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-all text-sm";
 
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900 flex flex-col items-center p-4 sm:p-6 font-sans">
+    <main className="min-h-screen bg-gray-50 text-gray-900 flex flex-col items-center p-4 sm:p-6 font-sans overflow-x-hidden w-full max-w-[100vw]">
       {/* SOLUCIÓN AL COLOR DE LA FECHA */}
       <style>{`
         .custom-date-input::before { color: #111827 !important; }
         .custom-date-input:disabled::before { color: #9ca3af !important; }
       `}</style>
+      
+      <div className="w-full max-w-md bg-white rounded-2xl border border-gray-200 p-6 shadow-xl mt-2 relative">
 
-      <div className="w-full max-w-md bg-white rounded-2xl border border-gray-200 p-6 shadow-xl mt-2">
-
-        {/* Título de la App */}
-        <div className="text-center mb-6">
-          <h1 className="text-xl font-bold text-green-800 tracking-wide">SGI Gastos Corporativos</h1>
-          <p className="text-xs text-gray-500 mt-0.5 uppercase font-semibold">Carga de Movimientos</p>
+        {/* --- NUEVA CABECERA FLEXIBLE (IMPROVED MOBILE DESIGN) --- */}
+        <div className="flex justify-between items-start mb-1 pt-1">
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold text-green-800 tracking-wide">
+              SGI
+            </h1>
+            <h2 className="text-base font-semibold text-gray-800 -mt-1">
+              Gastos Corporativos
+            </h2>
+          </div>
+          
+          <button 
+            onClick={handleSignOut} 
+            className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors shadow-inner"
+            title="Cerrar Sesión"
+          >
+            Salir
+          </button>
         </div>
+        
+        {/* Subtítulo alineado a la izquierda */}
+        <p className="text-xs text-gray-500 mb-6 uppercase font-semibold text-left">
+          Carga de Movimientos
+        </p>
+        {/* --------------------------------------------------------- */}
 
         {/* Tabs de Navegación */}
         <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-lg mb-6 border border-gray-200">
@@ -240,7 +274,7 @@ export default function Home() {
             )}
           </div>
 
-          {/* 5. IMPUTACIÓN DE GASTO (Condicionales con bordes de color suave para diferenciar) */}
+          {/* 5. IMPUTACIÓN DE GASTO */}
           {formData.tipoGasto === "Obra" && (
             <div>
               <label className="block text-xs font-bold text-orange-600 mb-1">Imputación de Gasto (Obra) <span className="text-red-500">*</span></label>
@@ -280,9 +314,9 @@ export default function Home() {
               <label className="block text-xs font-bold text-teal-600 mb-1">Imputación de Gasto (Viaje) <span className="text-red-500">*</span></label>
               <select name="imputacionGasto" value={formData.imputacionGasto} onChange={handleChange} required className={`border-teal-300 focus:border-teal-500 focus:ring-teal-500 ${inputBaseClass}`}>
                 <option value="">Seleccione...</option>
-                <option value="Hotel">Hotel</option>
-                <option value="Vuelo">Vuelo</option>
-                <option value="Cena">Cena</option>
+                <option value="hotel">hotel</option>
+                <option value="vuelo">vuelo</option>
+                <option value="cena">cena</option>
                 <option value="Otro">Otro</option>
               </select>
               {formData.imputacionGasto === "Otro" && (
