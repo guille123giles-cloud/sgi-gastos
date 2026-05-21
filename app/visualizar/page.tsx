@@ -9,19 +9,15 @@ export default function VisualizarBBDD() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-    // --- ESTADOS DE PAGINACIÓN ---
     const [page, setPage] = useState(0)
     const [hasMore, setHasMore] = useState(true)
     const [loadingMore, setLoadingMore] = useState(false)
     const PAGE_SIZE = 100
-    // ------------------------------------
 
     const [tasas, setTasas] = useState({ USD_en_ARS: 1000, BRL_en_ARS: 200 })
     const [loadingTasas, setLoadingTasas] = useState(true)
 
-    // --- ESTADO PARA EXPORTACIÓN ---
     const [isExporting, setIsExporting] = useState(false)
-    // -------------------------------------
 
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [recordToDelete, setRecordToDelete] = useState<string | null>(null)
@@ -41,17 +37,22 @@ export default function VisualizarBBDD() {
         moneda: '', montoExacto: '', montoMin: '', montoMax: ''
     })
 
-    // --- NUEVO: BLOQUEO DE SCROLL EN FONDO ---
+    // --- NUEVO: Bloqueo estricto de scroll en móviles al abrir cualquier modal ---
     useEffect(() => {
         const cualquierModalAbierto = showFilters || !!editingRecord || showDeleteModal;
         if (cualquierModalAbierto) {
+            document.documentElement.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'unset';
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
         }
-        return () => { document.body.style.overflow = 'unset'; };
+        return () => { 
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = ''; 
+        };
     }, [showFilters, editingRecord, showDeleteModal]);
-    // -----------------------------------------
+    // -----------------------------------------------------------------------------
 
     useEffect(() => {
         fetchMovimientos(0)
@@ -586,7 +587,7 @@ export default function VisualizarBBDD() {
                             className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-bold rounded-lg transition-colors flex items-center gap-2 shadow-sm flex-1 sm:flex-none justify-center disabled:opacity-70 disabled:cursor-not-allowed"
                             title="Descargar Excel con formato"
                         >
-                            {isExporting ? '⏳ Generando...' : '📊 Exportar Excel'}
+                            {isExporting ? 'Generando...' : 'Exportar Excel'}
                         </button>
                         
                         <button
@@ -605,6 +606,33 @@ export default function VisualizarBBDD() {
                 </div>
 
                 {error && <div className="text-red-700 bg-red-50 p-3 rounded-lg border border-red-200">{error}</div>}
+
+                {/* --- NUEVO: TOTALES (Arriba del todo para ambas vistas) --- */}
+                <div className="bg-green-800 rounded-xl p-5 text-white shadow-md border border-green-900 flex flex-col md:flex-row justify-between gap-5 md:gap-8">
+                    <div className="flex-1">
+                        <p className="text-xs font-bold text-green-300 mb-2 uppercase tracking-wide">Sumatoria por Divisa:</p>
+                        <div className="flex flex-col gap-1.5 text-sm font-semibold">
+                            {totalPesos > 0 && <span>ARS {totalPesos.toFixed(2)}</span>}
+                            {totalDolares > 0 && <span>USD {totalDolares.toFixed(2)}</span>}
+                            {totalReales > 0 && <span>BRL {totalReales.toFixed(2)}</span>}
+                            {totalPesos === 0 && totalDolares === 0 && totalReales === 0 && <span>0.00</span>}
+                        </div>
+                    </div>
+                    <div className="flex-1 border-t border-green-700 pt-4 md:border-t-0 md:border-l md:pt-0 md:pl-8">
+                        <p className="text-xs font-bold text-green-300 mb-2 uppercase tracking-wide">Gran Total Convertido:</p>
+                        <div className="flex flex-col gap-1.5 text-base font-bold">
+                            <span>ARS {granTotalARS.toFixed(2)}</span>
+                            <span>USD {granTotalUSD.toFixed(2)}</span>
+                            <span>BRL {granTotalBRL.toFixed(2)}</span>
+                        </div>
+                        {!loadingTasas && (
+                            <p className="text-[10px] text-green-400 mt-3 font-medium uppercase tracking-wider bg-green-900/50 p-2 rounded border border-green-700/50 text-center md:text-left md:bg-transparent md:p-0 md:border-0 md:mt-3">
+                                Tasa API: 1 USD = {tasas.USD_en_ARS} ARS | 1 BRL = {tasas.BRL_en_ARS} ARS
+                            </p>
+                        )}
+                    </div>
+                </div>
+                {/* ---------------------------------------------------------- */}
 
                 {/* VISTA ESCRITORIO */}
                 <div className="hidden md:block bg-white rounded-xl overflow-hidden overflow-x-auto border border-gray-200 shadow-sm">
@@ -656,36 +684,6 @@ export default function VisualizarBBDD() {
                                 ))
                             )}
                         </tbody>
-                        <tfoot className="font-bold border-t border-gray-300">
-                            <tr className="bg-gray-100 text-gray-800">
-                                <td colSpan={8} className="p-4 text-right tracking-wide">Sumatoria por Divisa:</td>
-                                <td colSpan={2} className="p-4 flex flex-col items-start gap-1 text-xs">
-                                    {totalPesos > 0 && <span>ARS {totalPesos.toFixed(2)}</span>}
-                                    {totalDolares > 0 && <span>USD {totalDolares.toFixed(2)}</span>}
-                                    {totalReales > 0 && <span>BRL {totalReales.toFixed(2)}</span>}
-                                    {totalPesos === 0 && totalDolares === 0 && totalReales === 0 && <span>0.00</span>}
-                                </td>
-                            </tr>
-                            <tr className="bg-green-800 border-t border-green-900 text-white">
-                                <td colSpan={8} className="p-4 text-right">
-                                    <div className="flex flex-col items-end">
-                                        <span className="tracking-wide">GRAN TOTAL CONVERTIDO:</span>
-                                        {loadingTasas ? (
-                                            <span className="text-[10px] text-green-200 mt-1 font-normal">Conectando con DolarAPI...</span>
-                                        ) : (
-                                            <span className="text-[10px] text-green-200 mt-1 font-normal uppercase tracking-wider">
-                                                Tasa Venta: 1 USD = {tasas.USD_en_ARS} ARS | 1 BRL = {tasas.BRL_en_ARS} ARS
-                                            </span>
-                                        )}
-                                    </div>
-                                </td>
-                                <td colSpan={2} className="p-4 flex flex-col items-start gap-1 text-white text-sm">
-                                    <span>ARS {granTotalARS.toFixed(2)}</span>
-                                    <span>USD {granTotalUSD.toFixed(2)}</span>
-                                    <span>BRL {granTotalBRL.toFixed(2)}</span>
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
 
@@ -730,32 +728,6 @@ export default function VisualizarBBDD() {
                     )}
                 </div>
 
-                {/* TOTALES VISTA CELULAR */}
-                <div className="md:hidden bg-green-800 rounded-xl p-5 text-white shadow-md border border-green-900 mt-4">
-                    <div className="mb-4 border-b border-green-700 pb-4">
-                        <p className="text-xs font-bold text-green-300 mb-2 uppercase tracking-wide">Sumatoria por Divisa:</p>
-                        <div className="flex flex-col gap-1.5 text-sm font-semibold">
-                            {totalPesos > 0 && <span>ARS {totalPesos.toFixed(2)}</span>}
-                            {totalDolares > 0 && <span>USD {totalDolares.toFixed(2)}</span>}
-                            {totalReales > 0 && <span>BRL {totalReales.toFixed(2)}</span>}
-                            {totalPesos === 0 && totalDolares === 0 && totalReales === 0 && <span>0.00</span>}
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-xs font-bold text-green-300 mb-2 uppercase tracking-wide">Gran Total Convertido:</p>
-                        <div className="flex flex-col gap-1.5 text-base font-bold">
-                            <span>ARS {granTotalARS.toFixed(2)}</span>
-                            <span>USD {granTotalUSD.toFixed(2)}</span>
-                            <span>BRL {granTotalBRL.toFixed(2)}</span>
-                        </div>
-                        {!loadingTasas && (
-                            <p className="text-[9px] text-green-400 mt-3 font-medium uppercase tracking-wider bg-green-900/50 p-2 rounded border border-green-700/50 text-center">
-                                Tasa API: 1 USD = {tasas.USD_en_ARS} ARS | 1 BRL = {tasas.BRL_en_ARS} ARS
-                            </p>
-                        )}
-                    </div>
-                </div>
-
                 {/* BOTÓN DE CARGAR MÁS */}
                 {hasMore && !loading && (
                     <div className="flex justify-center mt-6 mb-8 w-full">
@@ -764,7 +736,7 @@ export default function VisualizarBBDD() {
                             disabled={loadingMore}
                             className="px-8 py-3 bg-white border-2 border-green-700 text-green-800 font-bold rounded-xl hover:bg-green-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                         >
-                            {loadingMore ? <>⏳ Cargando lote...</> : <>⬇️ Cargar más registros</>}
+                            {loadingMore ? <>Cargando lote...</> : <>⬇ Cargar más registros</>}
                         </button>
                     </div>
                 )}
@@ -774,8 +746,9 @@ export default function VisualizarBBDD() {
             {/* ========================================= */}
             {/* MODAL DE FILTROS FLOTANTE OPTIMIZADO      */}
             {/* ========================================= */}
+            {/* Añadido overscroll-none al overlay */}
             {showFilters && (
-                <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 animate-fade-in">
+                <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 animate-fade-in overscroll-none">
                     <div className="bg-white w-full max-w-5xl rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-2xl max-h-[88vh] overflow-y-auto relative my-auto">
                         
                         <button 
@@ -793,7 +766,6 @@ export default function VisualizarBBDD() {
                             </button>
                         </div>
 
-                        {/* --- NUEVA GRILLA RESPONSIVE (1 COLUMNA EN MÓVIL) --- */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-5 items-end">
                             <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Fecha Exacta</label>
@@ -827,7 +799,6 @@ export default function VisualizarBBDD() {
                             </div>
                         </div>
 
-                        {/* --- SEGUNDA GRILLA RESPONSIVE --- */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 pt-5 border-t border-gray-100 items-start">
                             <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Ingreso</label>
@@ -894,9 +865,9 @@ export default function VisualizarBBDD() {
             )}
             {/* ========================================= */}
 
-            {/* MODAL DE EDICIÓN RÁPIDA */}
+            {/* MODAL DE EDICIÓN RÁPIDA - Añadido overscroll-none */}
             {editingRecord && (
-                <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
+                <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto overscroll-none">
                     <div className="bg-white w-full max-w-2xl rounded-2xl border border-gray-200 p-6 shadow-2xl mt-10 mb-10">
                         <h2 className="text-xl font-bold text-green-800 mb-6 border-b border-gray-200 pb-3">Editar Registro</h2>
                         <form onSubmit={confirmEdit} className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5">
@@ -1024,9 +995,9 @@ export default function VisualizarBBDD() {
                 </div>
             )}
 
-            {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN */}
+            {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN - Añadido overscroll-none */}
             {showDeleteModal && (
-                <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overscroll-none">
                     <div className="bg-white w-full max-w-sm rounded-2xl border border-gray-200 p-6 text-center shadow-2xl">
                         <div className="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4 text-2xl border border-red-100">⚠️</div>
                         <h2 className="text-lg font-bold text-gray-900 mb-2">¿Está seguro?</h2>

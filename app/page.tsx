@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
@@ -30,6 +30,22 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+
+  // --- NUEVO: Bloqueo estricto de scroll en móviles al abrir modal ---
+  useEffect(() => {
+    if (showModal) {
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [showModal]);
+  // -------------------------------------------------------------------
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -134,7 +150,6 @@ export default function Home() {
     }
   };
 
-  // Función para cerrar sesión
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
@@ -146,14 +161,11 @@ export default function Home() {
   };
 
   const finalSummary = getFinalValues();
-
-  // CLASES BASE DE INPUTS
   const inputBaseClass = "w-full p-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-all text-sm";
   const inputSubClass = "w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-all text-sm";
 
   return (
     <main className="min-h-screen bg-gray-50 text-gray-900 flex flex-col items-center p-4 sm:p-6 font-sans overflow-x-hidden w-full max-w-[100vw]">
-      {/* SOLUCIÓN AL COLOR DE LA FECHA */}
       <style>{`
         .custom-date-input::before { color: #111827 !important; }
         .custom-date-input:disabled::before { color: #9ca3af !important; }
@@ -161,7 +173,6 @@ export default function Home() {
       
       <div className="w-full max-w-md bg-white rounded-2xl border border-gray-200 p-6 shadow-xl mt-2 relative">
 
-        {/* --- NUEVA CABECERA FLEXIBLE (IMPROVED MOBILE DESIGN) --- */}
         <div className="flex justify-between items-start mb-1 pt-1">
           <div className="flex flex-col">
             <h1 className="text-xl font-bold text-green-800 tracking-wide">
@@ -177,17 +188,14 @@ export default function Home() {
             className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors shadow-inner"
             title="Cerrar Sesión"
           >
-            Salir
+            Salir 🚪
           </button>
         </div>
         
-        {/* Subtítulo alineado a la izquierda */}
         <p className="text-xs text-gray-500 mb-6 uppercase font-semibold text-left">
           Carga de Movimientos
         </p>
-        {/* --------------------------------------------------------- */}
 
-        {/* Tabs de Navegación */}
         <div className="grid grid-cols-2 gap-2 p-1 bg-gray-100 rounded-lg mb-6 border border-gray-200">
           <button className="py-2 text-sm font-bold rounded-md bg-white text-green-800 shadow-sm border border-gray-200 transition-all">
             Cargar
@@ -205,13 +213,11 @@ export default function Home() {
 
         <form onSubmit={handlePreSubmit} className="space-y-4">
 
-          {/* 1. FECHA */}
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Fecha <span className="text-red-500">*</span></label>
             <input type="date" name="fecha" value={formData.fecha} onChange={handleChange} required data-date={formatearFechaEs(formData.fecha)} className={`${inputBaseClass} custom-date-input`} />
           </div>
 
-          {/* 2. INGRESO */}
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Ingreso <span className="text-red-500">*</span></label>
             <select name="ingreso" value={formData.ingreso} onChange={handleChange} required className={inputBaseClass}>
@@ -241,7 +247,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* 3. EGRESO */}
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Egreso <span className="text-red-500">*</span></label>
             <select name="egreso" value={formData.egreso} onChange={handleChange} required className={inputBaseClass}>
@@ -257,7 +262,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* 4. TIPO DE GASTO */}
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Tipo de Gasto <span className="text-red-500">*</span></label>
             <select name="tipoGasto" value={formData.tipoGasto} onChange={handleChange} required className={inputBaseClass}>
@@ -274,7 +278,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* 5. IMPUTACIÓN DE GASTO */}
           {formData.tipoGasto === "Obra" && (
             <div>
               <label className="block text-xs font-bold text-orange-600 mb-1">Imputación de Gasto (Obra) <span className="text-red-500">*</span></label>
@@ -325,7 +328,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* 6. CATEGORÍA DE GASTO */}
           {formData.tipoGasto === "Persona" && ["Jose luis", "Tainara", "Ednaldo"].includes(formData.imputacionGasto) && (
             <div>
               <label className="block text-xs font-bold text-purple-600 mb-1">Categoría de Gasto <span className="text-red-500">*</span></label>
@@ -338,13 +340,11 @@ export default function Home() {
             </div>
           )}
 
-          {/* 7. DESCRIPCIÓN */}
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Descripción (Opcional)</label>
             <input type="text" name="descripcion" value={formData.descripcion} onChange={handleChange} placeholder="Detalle adicional..." className={inputBaseClass} />
           </div>
 
-          {/* 8. MONEDA Y MONTO */}
           <div className="grid grid-cols-5 gap-3">
             <div className="col-span-2">
               <label className="block text-xs font-bold text-gray-700 mb-1">Moneda <span className="text-red-500">*</span></label>
@@ -362,16 +362,15 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Botón de envío */}
           <button type="submit" className="w-full bg-green-700 text-white p-3 rounded-lg font-bold border border-green-800 hover:bg-green-800 active:scale-[0.99] transition-all mt-4 shadow-sm">
             Ingresar Movimiento
           </button>
         </form>
       </div>
 
-      {/* MODAL DE CONFIRMACIÓN */}
+      {/* MODAL DE CONFIRMACIÓN - Añadido overscroll-none */}
       {showModal && (
-        <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto overscroll-none">
           <div className="bg-white w-full max-w-sm rounded-xl border border-gray-200 p-6 text-left shadow-2xl">
             <h2 className="text-lg font-bold text-green-800 mb-1">Confirmar Registro</h2>
             <p className="text-xs text-gray-500 mb-4">Verifique la información antes de guardar:</p>
