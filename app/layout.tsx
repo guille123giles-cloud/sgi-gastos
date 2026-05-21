@@ -22,14 +22,14 @@ export const viewport: Viewport = {
 /* ----------------------------------------- */
 
 export const metadata: Metadata = {
-  title: "SGI Gastos Corporativos",
+  title: "CDS Gastos Corporativos",
   description: "Sistema Móvil de Registro y Visualización de Gastos",
   manifest: "/manifest.json",
   themeColor: "#15803d",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "SGI Gastos",
+    title: "CDS Gastos",
   },
 };
 

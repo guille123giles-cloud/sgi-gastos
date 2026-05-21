@@ -40,7 +40,7 @@ export default function LoginPage() {
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
             <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 shadow-xl">
                 <div className="text-center mb-8">
-                    <h1 className="text-2xl font-bold text-green-800">SGI Gastos Corporativos</h1>
+                    <h1 className="text-2xl font-bold text-green-800">CDS Gastos Corporativos</h1>
                     <p className="text-sm text-gray-500 mt-1">Acceso restringido para socios</p>
                 </div>
 

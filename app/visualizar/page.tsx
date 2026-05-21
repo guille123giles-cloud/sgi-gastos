@@ -551,7 +551,7 @@ export default function VisualizarBBDD() {
             const link = document.createElement('a');
             link.href = url;
             const fechaHoy = new Date().toLocaleDateString('es-AR').replace(/\//g, '-');
-            link.setAttribute('download', `SGI_Gastos_${fechaHoy}.xls`);
+            link.setAttribute('download', `CDS_Gastos_${fechaHoy}.xls`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

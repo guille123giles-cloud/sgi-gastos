@@ -1,6 +1,6 @@
 {
-  "name": "SGI Gastos Corporativos",
-  "short_name": "SGI Gastos",
+  "name": "CDS Gastos Corporativos",
+  "short_name": "CDS Gastos",
   "description": "Sistema Móvil de Registro y Visualización de Gastos",
   "start_url": "/",
   "display": "standalone",
