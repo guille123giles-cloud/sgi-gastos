@@ -41,6 +41,18 @@ export default function VisualizarBBDD() {
         moneda: '', montoExacto: '', montoMin: '', montoMax: ''
     })
 
+    // --- NUEVO: BLOQUEO DE SCROLL EN FONDO ---
+    useEffect(() => {
+        const cualquierModalAbierto = showFilters || !!editingRecord || showDeleteModal;
+        if (cualquierModalAbierto) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => { document.body.style.overflow = 'unset'; };
+    }, [showFilters, editingRecord, showDeleteModal]);
+    // -----------------------------------------
+
     useEffect(() => {
         fetchMovimientos(0)
         fetchCotizaciones()
@@ -574,14 +586,14 @@ export default function VisualizarBBDD() {
                             className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-bold rounded-lg transition-colors flex items-center gap-2 shadow-sm flex-1 sm:flex-none justify-center disabled:opacity-70 disabled:cursor-not-allowed"
                             title="Descargar Excel con formato"
                         >
-                            {isExporting ? 'Generando...' : 'Exportar Excel'}
+                            {isExporting ? '⏳ Generando...' : '📊 Exportar Excel'}
                         </button>
                         
                         <button
                             onClick={() => setShowFilters(true)}
                             className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors border flex-1 sm:flex-none justify-center bg-white text-gray-700 border-gray-300 hover:bg-gray-50 shadow-sm"
                         >
-                            Filtrar Datos
+                            🔍 Filtrar Datos
                         </button>
                         
                         <Link href="/" className="w-full sm:w-auto">
@@ -764,10 +776,8 @@ export default function VisualizarBBDD() {
             {/* ========================================= */}
             {showFilters && (
                 <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 animate-fade-in">
-                    {/* max-h-[88vh] y overflow-y-auto habilitan el scroll interno seguro en celulares */}
                     <div className="bg-white w-full max-w-5xl rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-2xl max-h-[88vh] overflow-y-auto relative my-auto">
                         
-                        {/* Botón de cierre superior (✕) para arrepentirse */}
                         <button 
                             onClick={() => setShowFilters(false)}
                             className="absolute right-4 top-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-800 font-bold text-lg transition-colors"
@@ -777,49 +787,49 @@ export default function VisualizarBBDD() {
                         </button>
 
                         <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3 pr-8">
-                            <h2 className="text-xl font-bold text-green-800 flex items-center gap-2">Filtros de Búsqueda</h2>
+                            <h2 className="text-xl font-bold text-green-800 flex items-center gap-2">🔍 Filtros de Búsqueda</h2>
                             <button onClick={limpiarFiltros} className="text-xs font-bold text-gray-500 hover:text-red-600 transition-colors bg-gray-50 hover:bg-red-50 px-3 py-1.5 rounded-lg border border-gray-200">
-                                Limpiar filtros
+                                🗑️ Limpiar filtros
                             </button>
                         </div>
 
-                        {/* Primera fila de filtros (Fechas y Montos) */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-5 items-end">
-                            <div>
+                        {/* --- NUEVA GRILLA RESPONSIVE (1 COLUMNA EN MÓVIL) --- */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-5 items-end">
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Fecha Exacta</label>
                                 <input type="date" name="fechaExacta" value={filtros.fechaExacta} onChange={handleFiltroChange} data-date={getPlaceholderFecha(filtros.fechaExacta)} disabled={!!filtros.fechaDesde || !!filtros.fechaHasta} className={`custom-date-input ${inputBaseClass}`} />
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Fecha Desde</label>
                                 <input type="date" name="fechaDesde" value={filtros.fechaDesde} onChange={handleFiltroChange} data-date={getPlaceholderFecha(filtros.fechaDesde)} disabled={!!filtros.fechaExacta} className={`custom-date-input ${inputBaseClass}`} />
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Fecha Hasta</label>
                                 <input type="date" name="fechaHasta" value={filtros.fechaHasta} onChange={handleFiltroChange} data-date={getPlaceholderFecha(filtros.fechaHasta)} disabled={!!filtros.fechaExacta} className={`custom-date-input ${inputBaseClass}`} />
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-green-700 uppercase mb-1">Moneda</label>
                                 <select name="moneda" value={filtros.moneda} onChange={handleFiltroChange} className={`border-green-300 ${inputBaseClass}`}>
                                     <option value="">Todas...</option><option value="Pesos">Pesos</option><option value="USD">USD</option><option value="Reales">Reales</option>
                                 </select>
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Monto Exacto</label>
                                 <input type="number" name="montoExacto" placeholder="0.00" value={filtros.montoExacto} onChange={handleFiltroChange} disabled={!!filtros.montoMin || !!filtros.montoMax} className={inputBaseClass} />
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Monto Mínimo</label>
                                 <input type="number" name="montoMin" placeholder="0.00" value={filtros.montoMin} onChange={handleFiltroChange} disabled={!!filtros.montoExacto} className={inputBaseClass} />
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Monto Máximo</label>
                                 <input type="number" name="montoMax" placeholder="9999.00" value={filtros.montoMax} onChange={handleFiltroChange} disabled={!!filtros.montoExacto} className={inputBaseClass} />
                             </div>
                         </div>
 
-                        {/* Segunda fila de filtros (Categorías y Selectores) */}
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-5 border-t border-gray-100 items-start">
-                            <div>
+                        {/* --- SEGUNDA GRILLA RESPONSIVE --- */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 pt-5 border-t border-gray-100 items-start">
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Ingreso</label>
                                 <select name="ingresoSelect" value={filtros.ingresoSelect} onChange={handleFiltroChange} className={inputBaseClass}>
                                     <option value="">Todos...</option><option value="Consorcio">Consorcio</option><option value="Aldo">Aldo</option><option value="Diego">Diego</option><option value="Otros">Otro...</option>
@@ -834,28 +844,28 @@ export default function VisualizarBBDD() {
                                 )}
                                 {filtros.ingresoSelect === 'Otros' && <input type="text" name="ingreso" placeholder="Especifique..." value={filtros.ingreso} onChange={handleFiltroChange} className={`mt-2 ${inputBaseClass}`} />}
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Egreso</label>
                                 <select name="egresoSelect" value={filtros.egresoSelect} onChange={handleFiltroChange} className={inputBaseClass}>
                                     <option value="">Todos...</option><option value="Aldo">Aldo</option><option value="Diego">Diego</option><option value="Banco">Banco</option><option value="Jose Luis">Jose Luis</option><option value="Otros">Otro...</option>
                                 </select>
                                 {filtros.egresoSelect === 'Otros' && <input type="text" name="egreso" placeholder="Especifique..." value={filtros.egreso} onChange={handleFiltroChange} className={`mt-2 ${inputBaseClass}`} />}
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Tipo</label>
                                 <select name="tipoSelect" value={filtros.tipoSelect} onChange={handleFiltroChange} className={inputBaseClass}>
                                     <option value="">Todos...</option><option value="Obra">Obra</option><option value="Persona">Persona</option><option value="Viaje">Viaje</option><option value="Contador">Contador</option><option value="Administración">Administración</option><option value="Otros">Otro...</option>
                                 </select>
                                 {filtros.tipoSelect === 'Otros' && <input type="text" name="tipo_gasto" placeholder="Especifique..." value={filtros.tipo_gasto} onChange={handleFiltroChange} className={`mt-2 ${inputBaseClass}`} />}
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Imputación</label>
                                 <select name="imputacionSelect" value={filtros.imputacionSelect} onChange={handleFiltroChange} className={inputBaseClass}>
                                     <option value="">Todas...</option><option value="Guaruya">Guaruya</option><option value="Santos">Santos</option><option value="Aldo">Aldo</option><option value="Diego">Diego</option><option value="Lucas">Lucas</option><option value="Jose luis">Jose luis</option><option value="Tainara">Tainara</option><option value="Ednaldo">Ednaldo</option><option value="hotel">hotel</option><option value="vuelo">vuelo</option><option value="cena">cena</option><option value="Otros">Otro...</option>
                                 </select>
                                 {filtros.imputacionSelect === 'Otros' && <input type="text" name="imputacion_gasto" placeholder="Especifique..." value={filtros.imputacion_gasto} onChange={handleFiltroChange} className={`mt-2 ${inputBaseClass}`} />}
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Categoría</label>
                                 <select name="categoriaSelect" value={filtros.categoriaSelect} onChange={handleFiltroChange} className={inputBaseClass}>
                                     <option value="">Todas...</option><option value="obra">Obra</option><option value="caja chica">Caja Chica</option><option value="sueldo">Sueldo</option><option value="Otros">Otro...</option>
@@ -864,7 +874,6 @@ export default function VisualizarBBDD() {
                             </div>
                         </div>
 
-                        {/* Botones de acción inferiores con opción de cancelar */}
                         <div className="pt-5 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-2 mt-6">
                             <button 
                                 onClick={() => setShowFilters(false)} 
