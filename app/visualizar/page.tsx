@@ -577,7 +577,7 @@ export default function VisualizarBBDD() {
                 {/* Encabezado y Controles */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 rounded-xl border border-gray-200 shadow-sm gap-4">
                     <div>
-                        <h1 className="text-xl font-bold text-green-800">BBDD Histórica de Movimientos</h1>
+                        <h1 className="text-xl font-bold text-green-800">Movimientos</h1>
                         <p className="text-sm text-gray-500 font-medium">Visualización y gestión de gastos corporativos</p>
                     </div>
                     <div className="flex flex-wrap gap-2 w-full sm:w-auto">
@@ -760,9 +760,9 @@ export default function VisualizarBBDD() {
                         </button>
 
                         <div className="flex justify-between items-center mb-5 border-b border-gray-200 pb-3 pr-8">
-                            <h2 className="text-xl font-bold text-green-800 flex items-center gap-2">🔍 Filtros de Búsqueda</h2>
+                            <h2 className="text-xl font-bold text-green-800 flex items-center gap-2">Filtros de Búsqueda</h2>
                             <button onClick={limpiarFiltros} className="text-xs font-bold text-gray-500 hover:text-red-600 transition-colors bg-gray-50 hover:bg-red-50 px-3 py-1.5 rounded-lg border border-gray-200">
-                                🗑️ Limpiar filtros
+                                Limpiar filtros
                             </button>
                         </div>
 
