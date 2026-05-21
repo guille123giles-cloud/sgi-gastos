@@ -2,13 +2,16 @@ import withPWAInit from "@ducanh2912/next-pwa";
 
 const withPWA = withPWAInit({
   dest: "public",
-  disable: process.env.NODE_ENV === "development",
   register: true,
+  skipWaiting: true,
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Acá podés dejar otras configuraciones si tenías alguna, si no, dejalo así.
+  // Esta línea le dice a Next.js que no fuerce Turbopack y use la config estándar
+  webpack: (config) => {
+    return config;
+  },
 };
 
 export default withPWA(nextConfig);
