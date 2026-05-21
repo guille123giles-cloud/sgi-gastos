@@ -4,11 +4,12 @@ const withPWA = withPWAInit({
   dest: "public",
   register: true,
   skipWaiting: true,
+  disable: false, 
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Esta línea le dice a Next.js que no fuerce Turbopack y use la config estándar
+  // Desactivamos Turbopack explícitamente para evitar el conflicto
   webpack: (config) => {
     return config;
   },
