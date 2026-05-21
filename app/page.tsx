@@ -176,7 +176,7 @@ export default function Home() {
         <div className="flex justify-between items-start mb-1 pt-1">
           <div className="flex flex-col">
             <h1 className="text-xl font-bold text-green-800 tracking-wide">
-              SGI
+              CONSTRUCOES DO SUL
             </h1>
             <h2 className="text-base font-semibold text-gray-800 -mt-1">
               Gastos Corporativos
@@ -188,7 +188,7 @@ export default function Home() {
             className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors shadow-inner"
             title="Cerrar Sesión"
           >
-            Salir 🚪
+            Salir
           </button>
         </div>
         

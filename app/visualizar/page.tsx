@@ -594,7 +594,7 @@ export default function VisualizarBBDD() {
                             onClick={() => setShowFilters(true)}
                             className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors border flex-1 sm:flex-none justify-center bg-white text-gray-700 border-gray-300 hover:bg-gray-50 shadow-sm"
                         >
-                            🔍 Filtrar Datos
+                            Filtrar Datos
                         </button>
                         
                         <Link href="/" className="w-full sm:w-auto">
@@ -677,7 +677,7 @@ export default function VisualizarBBDD() {
                                         <td className="p-4 text-center font-bold text-gray-500">{mov.moneda}</td>
                                         <td className="p-4 text-right font-bold text-green-700">{Number(mov.monto).toFixed(2)}</td>
                                         <td className="p-4 text-center space-x-3">
-                                            <button onClick={() => triggerEdit(mov)} className="text-gray-400 hover:text-blue-600 transition-colors">✏️</button>
+                                            <button onClick={() => triggerEdit(mov)} className="text-gray-400 hover:text-green-700 transition-colors">✏️</button>
                                             <button onClick={() => triggerDelete(mov.id)} className="text-gray-400 hover:text-red-600 transition-colors">🗑️</button>
                                         </td>
                                     </tr>
@@ -720,7 +720,7 @@ export default function VisualizarBBDD() {
                                     </div>
                                 )}
                                 <div className="flex justify-end space-x-4 pt-3 border-t border-gray-100">
-                                    <button onClick={() => triggerEdit(mov)} className="text-blue-600 font-semibold text-sm">✏️ Editar</button>
+                                    <button onClick={() => triggerEdit(mov)} className="text-green-700 hover:text-green-800 font-semibold text-sm transition-colors">✏️ Editar</button>
                                     <button onClick={() => triggerDelete(mov.id)} className="text-red-500 font-semibold text-sm">🗑️ Eliminar</button>
                                 </div>
                             </div>
