@@ -26,6 +26,10 @@ export const metadata: Metadata = {
   description: "Sistema Móvil de Registro y Visualización de Gastos",
   manifest: "/manifest.json",
   themeColor: "#15803d",
+  icons: {
+    icon: "/icon-192x192.png",
+    apple: "/icon-192x192.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
