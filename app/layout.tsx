@@ -24,11 +24,12 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "CDS Gastos Corporativos",
   description: "Sistema Móvil de Registro y Visualización de Gastos",
-  manifest: "/manifest.json",
+  // ACA APLICAMOS EL TRUCO DEL CACHÉ (?v=3)
+  manifest: "/manifest.json?v=3",
   themeColor: "#15803d",
   icons: {
-    icon: "/icon-192x192.png",
-    apple: "/icon-192x192.png",
+    icon: "/icon-192x192.png?v=3",
+    apple: "/icon-192x192.png?v=3",
   },
   appleWebApp: {
     capable: true,
