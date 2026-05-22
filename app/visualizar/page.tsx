@@ -333,7 +333,8 @@ export default function VisualizarBBDD() {
         })
     }
 
-    const movimientosFiltrados = movimientos.filter(mov => {
+    // --- MODIFICADO: Invertimos el array para mostrar los más recientes arriba ---
+    const movimientosFiltrados = [...movimientos].filter(mov => {
         let cumple = true;
 
         if (filtros.fechaExacta && mov.fecha !== filtros.fechaExacta) cumple = false;
@@ -375,7 +376,8 @@ export default function VisualizarBBDD() {
         if (filtros.montoMax && Number(mov.monto) > Number(filtros.montoMax)) cumple = false;
 
         return cumple;
-    });
+    }).reverse();
+    // -----------------------------------------------------------------------------
 
     const totalPesos = movimientosFiltrados.filter(m => m.moneda === 'Pesos').reduce((acc, curr) => acc + Number(curr.monto), 0)
     const totalDolares = movimientosFiltrados.filter(m => m.moneda === 'USD').reduce((acc, curr) => acc + Number(curr.monto), 0)
@@ -398,6 +400,7 @@ export default function VisualizarBBDD() {
 
             if (error) throw error;
 
+            // --- MODIFICADO: Aplicamos el .reverse() también a la exportación ---
             const datosAExportar = (allData || []).filter(mov => {
                 let cumple = true;
 
@@ -439,7 +442,8 @@ export default function VisualizarBBDD() {
                 if (filtros.montoMax && Number(mov.monto) > Number(filtros.montoMax)) cumple = false;
 
                 return cumple;
-            });
+            }).reverse();
+            // ----------------------------------------------------------------------
 
             if (datosAExportar.length === 0) {
                 alert("No hay datos para exportar con los filtros actuales.");
@@ -607,7 +611,7 @@ export default function VisualizarBBDD() {
 
                 {error && <div className="text-red-700 bg-red-50 p-3 rounded-lg border border-red-200">{error}</div>}
 
-                {/* --- NUEVO: TOTALES (Arriba del todo para ambas vistas) --- */}
+                {/* TOTALES */}
                 <div className="bg-green-800 rounded-xl p-5 text-white shadow-md border border-green-900 flex flex-col md:flex-row justify-between gap-5 md:gap-8">
                     <div className="flex-1">
                         <p className="text-xs font-bold text-green-300 mb-2 uppercase tracking-wide">Sumatoria por Divisa:</p>
@@ -632,7 +636,6 @@ export default function VisualizarBBDD() {
                         )}
                     </div>
                 </div>
-                {/* ---------------------------------------------------------- */}
 
                 {/* VISTA ESCRITORIO */}
                 <div className="hidden md:block bg-white rounded-xl overflow-hidden overflow-x-auto border border-gray-200 shadow-sm">
@@ -743,10 +746,7 @@ export default function VisualizarBBDD() {
 
             </div>
 
-            {/* ========================================= */}
-            {/* MODAL DE FILTROS FLOTANTE OPTIMIZADO      */}
-            {/* ========================================= */}
-            {/* Añadido overscroll-none al overlay */}
+            {/* MODAL DE FILTROS FLOTANTE */}
             {showFilters && (
                 <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 animate-fade-in overscroll-none">
                     <div className="bg-white w-full max-w-5xl rounded-2xl border border-gray-200 p-5 sm:p-6 shadow-2xl max-h-[88vh] overflow-y-auto relative my-auto">
@@ -863,9 +863,8 @@ export default function VisualizarBBDD() {
                     </div>
                 </div>
             )}
-            {/* ========================================= */}
 
-            {/* MODAL DE EDICIÓN RÁPIDA - Añadido overscroll-none */}
+            {/* MODAL DE EDICIÓN RÁPIDA */}
             {editingRecord && (
                 <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto overscroll-none">
                     <div className="bg-white w-full max-w-2xl rounded-2xl border border-gray-200 p-6 shadow-2xl mt-10 mb-10">
@@ -995,7 +994,7 @@ export default function VisualizarBBDD() {
                 </div>
             )}
 
-            {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN - Añadido overscroll-none */}
+            {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN */}
             {showDeleteModal && (
                 <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overscroll-none">
                     <div className="bg-white w-full max-w-sm rounded-2xl border border-gray-200 p-6 text-center shadow-2xl">
