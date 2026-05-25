@@ -93,6 +93,7 @@ export default function VisualizarBBDD() {
             const from = pageIndex * PAGE_SIZE
             const to = from + PAGE_SIZE - 1
 
+            // Se mantiene el orden descendente original de la BBDD
             const { data, error, count } = await supabase
                 .from('gastos')
                 .select('*', { count: 'exact' })
@@ -333,7 +334,7 @@ export default function VisualizarBBDD() {
         })
     }
 
-    // --- MODIFICADO: Invertimos el array para mostrar los más recientes arriba ---
+    // --- MODIFICADO: Se quitó el .reverse() para respetar el orden descendente de la BBDD (más recientes arriba) ---
     const movimientosFiltrados = [...movimientos].filter(mov => {
         let cumple = true;
 
@@ -376,7 +377,7 @@ export default function VisualizarBBDD() {
         if (filtros.montoMax && Number(mov.monto) > Number(filtros.montoMax)) cumple = false;
 
         return cumple;
-    }).reverse();
+    });
     // -----------------------------------------------------------------------------
 
     const totalPesos = movimientosFiltrados.filter(m => m.moneda === 'Pesos').reduce((acc, curr) => acc + Number(curr.monto), 0)
@@ -400,7 +401,7 @@ export default function VisualizarBBDD() {
 
             if (error) throw error;
 
-            // --- MODIFICADO: Aplicamos el .reverse() también a la exportación ---
+            // --- MODIFICADO: Se quitó el .reverse() también en la exportación ---
             const datosAExportar = (allData || []).filter(mov => {
                 let cumple = true;
 
@@ -442,7 +443,7 @@ export default function VisualizarBBDD() {
                 if (filtros.montoMax && Number(mov.monto) > Number(filtros.montoMax)) cumple = false;
 
                 return cumple;
-            }).reverse();
+            });
             // ----------------------------------------------------------------------
 
             if (datosAExportar.length === 0) {
