@@ -833,7 +833,7 @@ export default function VisualizarBBDD() {
                             <div className="w-full">
                                 <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">Imputación</label>
                                 <select name="imputacionSelect" value={filtros.imputacionSelect} onChange={handleFiltroChange} className={inputBaseClass}>
-                                    <option value="">Todas...</option><option value="Guaruya">Guaruya</option><option value="Santos">Santos</option><option value="Aldo">Aldo</option><option value="Diego">Diego</option><option value="Lucas">Lucas</option><option value="Jose luis">Jose luis</option><option value="Tainara">Tainara</option><option value="Ednaldo">Ednaldo</option><option value="hotel">hotel</option><option value="vuelo">vuelo</option><option value="cena">cena</option><option value="Otros">Otro...</option>
+                                    <option value="">Todas...</option><option value="Guaruya">Guaruya</option><option value="Santos">Santos</option><option value="Aldo">Aldo</option><option value="Diego">Diego</option><option value="Lucas">Lucas</option><option value="Jose luis">Jose luis</option><option value="Tainara">Tainara</option><option value="Ednaldo">Ednaldo</option><option value="hotel">Hotel</option><option value="vuelo">Vuelo</option><option value="cena">Cena</option><option value="Otros">Otro...</option>
                                 </select>
                                 {filtros.imputacionSelect === 'Otros' && <input type="text" name="imputacion_gasto" placeholder="Especifique..." value={filtros.imputacion_gasto} onChange={handleFiltroChange} className={`mt-2 ${inputBaseClass}`} />}
                             </div>
@@ -948,7 +948,7 @@ export default function VisualizarBBDD() {
                                 <div>
                                     <label className="block text-xs font-bold text-teal-600 mb-1">Imputación de Gasto (Viaje)</label>
                                     <select name="imputacionSelect" value={editingRecord.imputacionSelect} onChange={handleEditChange} required className={`border-teal-300 ${inputBaseClass}`}>
-                                        <option value="">Seleccione...</option><option value="hotel">hotel</option><option value="vuelo">vuelo</option><option value="cena">cena</option><option value="Otro">Otro</option>
+                                        <option value="">Seleccione...</option><option value="hotel">Hotel</option><option value="vuelo">Vuelo</option><option value="cena">Cena</option><option value="Otro">Otro</option>
                                     </select>
                                     {editingRecord.imputacionSelect === "Otro" && (
                                         <div className="mt-2 pl-3 border-l-2 border-teal-500">

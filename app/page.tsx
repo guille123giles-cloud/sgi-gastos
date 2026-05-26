@@ -317,9 +317,9 @@ export default function Home() {
               <label className="block text-xs font-bold text-teal-600 mb-1">Imputación de Gasto (Viaje) <span className="text-red-500">*</span></label>
               <select name="imputacionGasto" value={formData.imputacionGasto} onChange={handleChange} required className={`border-teal-300 focus:border-teal-500 focus:ring-teal-500 ${inputBaseClass}`}>
                 <option value="">Seleccione...</option>
-                <option value="hotel">hotel</option>
-                <option value="vuelo">vuelo</option>
-                <option value="cena">cena</option>
+                <option value="hotel">Hotel</option>
+                <option value="vuelo">Vuelo</option>
+                <option value="cena">Cena</option>
                 <option value="Otro">Otro</option>
               </select>
               {formData.imputacionGasto === "Otro" && (
