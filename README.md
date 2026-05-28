@@ -1,69 +1,69 @@
-# CDS Gastos Corporativos
+<div align="center">
+  <img src="./public/logo-cds.jpg" alt="Logo CDS Gastos" width="150" />
+
+  <h1>CDS Gastos Corporativos</h1>
+  
+  <p>
+    <i>Plataforma ágil, intuitiva y segura para la gestión, control y visualización estructurada de gastos operativos.</i>
+  </p>
+
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+</div>
+
+<br/>
+
+> **Nota:** Este proyecto resuelve la necesidad de registrar los gastos operativos diarios de la empresa de manera inmediata y descentralizada, eliminando retrasos y pérdidas de datos de los reportes tradicionales.
 
 ## Descripción del Proyecto
-CDS Gastos Corporativos es una aplicación de software multiplataforma diseñada con un enfoque prioritario en dispositivos móviles (Mobile-First), siendo completamente funcional también en computadoras de escritorio. El propósito principal del sistema es resolver la necesidad de registrar los gastos operativos diarios de la empresa de manera inmediata y descentralizada. Tanto el director como los socios comerciales pueden ingresar los movimientos financieros en tiempo real desde cualquier ubicación, asegurando la centralización de la información y eliminando los retrasos o pérdidas de datos comunes en los reportes tradicionales.
 
----
+**CDS Gastos Corporativos** es una aplicación multiplataforma desarrollada bajo la filosofía *Mobile-First*, garantizando una experiencia de usuario fluida en dispositivos móviles mientras se mantiene completamente funcional en entornos de escritorio. 
 
-## Objetivos del Proyecto
+El sistema permite a los directores y socios comerciales autorizados cargar, auditar y gestionar movimientos financieros en tiempo real desde cualquier lugar, centralizando toda la información en una única BBDD segura.
 
-### Objetivo General
-* Desarrollar e implementar una aplicación ágil, intuitiva y segura para la carga, modificación, eliminación y visualización estructurada de los gastos de la empresa, optimizando la toma de decisiones financieras a nivel gerencial.
+## Características Principales
 
-### Objetivos Específicos
-* **Accesibilidad Celular:** Garantizar una interfaz móvil fluida basada en el wireframe inicial para facilitar la carga rápida de datos en pocos clics.
-* **Centralización de Datos:** Conectar la aplicación a una base de datos única para que todos los socios visualicen la misma información en tiempo real.
-* **Autonómia de Gestión (CRUD Completo):** Permitir a los usuarios autorizados corregir errores de tipeo o eliminar registros obsoletos directamente desde la app.
-* **Optimización del Análisis:** Proveer herramientas de filtrado avanzado para categorizar y auditar los gastos de manera visual y ordenada.
+* **Autenticación y Seguridad:** Control de acceso estricto integrado con Supabase Auth. Los datos están protegidos mediante políticas RLS (*Row Level Security*), bloqueando lecturas/escrituras no autorizadas.
+* **Gestión Autónoma (CRUD Completo):** Los usuarios pueden registrar nuevos gastos, editar errores de tipeo o eliminar registros obsoletos directamente desde la aplicación.
+* **Conversión Multi-moneda:** Integración en tiempo real con DolarAPI para realizar conversiones dinámicas entre ARS, USD y BRL, calculando totales de forma automática.
+* **Visualización Híbrida de BBDD:** La interfaz se adapta al dispositivo, mostrando una vista de "Tarjetas" (*Card View*) apiladas en móviles para evitar el scroll horizontal, y una "Matriz Tabular" clásica en monitores de escritorio.
+* **Filtros Avanzados:** Sistema de filtrado mediante ventanas modales superpuestas para segmentar registros por fecha, socio, categoría y monto.
+* **Exportación a Excel:** Funcionalidad para descargar reportes en formato `.xls` de los datos filtrados, manteniendo la estructura y los estilos corporativos.
+* **Alto Rendimiento:** Implementación de paginación por lotes (100 registros por bloque) para optimizar el consumo de red y acelerar las consultas a la BBDD.
 
----
+## Arquitectura y Tecnologías
 
-## Características de la Aplicación (Alcance)
+El proyecto emplea una arquitectura modular basada en las siguientes tecnologías:
 
-### Dentro del Alcance
-* **Módulo de Registro de Gastos:** Pantalla de carga simplificada que incluye validaciones y los campos de Fecha (selección automatizada o manual), Usuario/Ingreso (identificación del socio), Categoría (Proveedores, Logística, Servicios, Viáticos, etc.), Descripción textual del motivo y Monto/Reales (adaptable a la divisa).
-* **Módulo de Visualización Híbrida de BBDD:** Apartado exclusivo que adapta su diseño según el dispositivo, mostrando una Matriz Tabular clásica en escritorio y una "Vista de Tarjetas" (Card View) apiladas en móviles para evitar el scroll horizontal.
-* **Módulo de Modificación y Eliminación Protegida:** Herramientas de edición directa mediante un Modal de Edición que hereda la lógica de listas desplegables del formulario principal para evitar errores de tipeo en la BBDD.
-* **Sistema de Filtros Flotante:** Implementación de un Modal de Filtros superpuesto que permite segmentar la información por fechas, socios, categorías y montos sin ocupar espacio permanente en la interfaz.
-* **Módulo de Exportación:** Funcionalidad para generar y descargar un archivo Excel (`.xls`) con los datos filtrados, manteniendo la estructura, estilos y colores corporativos.
-* **Escalabilidad de BBDD:** Sistema de paginación por bloques ("Cargar más registros") que solicita los datos a la BBDD en lotes de 100 para optimizar el consumo de red y el rendimiento general.
-* **Módulo de Autenticación y Control de Acceso (Login):** Pantalla de inicio de sesión obligatoria integrada con Supabase Auth que restringe el acceso global mediante credenciales individuales.
+* **Frontend:** React / Next.js (App Router).
+* **Lenguaje:** TypeScript para tipado estático y reducción de errores en tiempo de ejecución.
+* **Estilos:** Tailwind CSS con un diseño "Excel Light Mode" (fondos blancos, grises claros y detalles en verde corporativo).
+* **BBDD y Backend:** Supabase (PostgreSQL) para almacenamiento relacional y gestión de usuarios.
+* **Despliegue:** Alojado en la nube de Vercel con alta disponibilidad (24/7).
 
-### Fuera del Alcance
-* Conciliación automática con cuentas bancarias o tarjetas de crédito.
-* Módulo de facturación electrónica o conexión con sistemas fiscales impositivos.
-* Gestión de nóminas o sueldos de empleados (limitado estrictamente a gastos operativos de los socios).
+## Instalación y Desarrollo Local
 
----
+Para correr este proyecto en tu entorno local, seguí estos pasos:
 
-## Requerimientos del Sistema
+1. Clonar el repositorio:
 
-### Requerimientos Funcionales
-1. El sistema debe validar la identidad del usuario en la pantalla de Login antes de permitir el acceso a los módulos de carga o visualización.
-2. El formulario de carga debe validar que el campo "Monto" sea estrictamente numérico antes de guardarse en la BBDD.
-3. La vista de la BBDD debe actualizarse automáticamente cada vez que un socio agregue o modifique un registro.
-4. El sistema debe solicitar confirmaciones emergentes con el resumen de los datos antes de un alta definitiva o una eliminación permanente.
-5. El sistema debe conectarse a la API de DolarAPI para realizar conversiones multi-moneda (ARS, USD, BRL) en tiempo real.
-6. Al final de cada vista de datos, el sistema debe calcular e imprimir dinámicamente el total acumulado desglosado por divisas y su gran total convertido.
+    git clone https://github.com/guille123giles-cloud/sgi-gastos.git
 
-### Requerimientos No Funcionales
-* **Seguridad (RLS):** Implementación de políticas de Seguridad a Nivel de Fila (Row Level Security) en Supabase, vinculadas al módulo de Login, imposibilitando cualquier lectura o escritura maliciosa externa.
-* **Diseño UI (Excel Light Mode):** Interfaz basada en un esquema de colores limpio, profesional y familiar (fondos blancos, grises claros y detalles en verde corporativo).
-* **Usabilidad:** Bloqueo explícito del scroll horizontal (`overflow-x-hidden`) en dispositivos móviles para garantizar una lectura vertical fluida.
-* **Disponibilidad:** Alojamiento en la nube a través de Vercel y Supabase, garantizando acceso continuo 24/7.
-* **Arquitectura:** Estructura de software modular basada en React y Next.js.
+2. Instalar las dependencias:
 
----
+    cd sgi-gastos
+    npm install
 
-## Fases de Desarrollo
+3. Configurar las variables de entorno (`.env.local`) con tus credenciales de Supabase.
 
-* **Fase 1: Diseño y Prototipado** (Completada)
-* **Fase 2: Modelado de BBDD y Backend** (Completada)
-* **Fase 3: Desarrollo del Frontend** (Completada)
-* **Fase 4: Pruebas e Implementación** (Completada)
-* **Fase 5: Módulo de Seguridad** (Completada)
+4. Iniciar el servidor de desarrollo:
 
----
+    npm run dev
 
-## Créditos y Equipo
-* **Líder de Proyecto:** Guillermo Giles
+## Autor
+
+**Guillermo German Giles**  
+*Estudiante de Ingeniería en Sistemas & Desarrollador Backend*
