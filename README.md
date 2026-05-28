@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/guille123giles-cloud/sgi-gastos/main/public/logo.jpg" alt="Logo CDS Gastos" width="150" />
+  <img src="https://raw.githubusercontent.com/guille123giles-cloud/sgi-gastos/main/public/logo.png" alt="Logo CDS Gastos" width="150" />
   <h1>CDS Gastos Corporativos</h1>
   
   <p>
